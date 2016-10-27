@@ -1,0 +1,140 @@
+#include "Ultrasonic.h"
+#define inPin0 0
+#define inPin1 1
+#define inPin2 2
+#define inPin3 3
+int IR_FOUND;
+
+
+int ultrasonicLowThreshold = 5;
+int ultrasonicHighThreshold = 10;
+
+Ultrasonic ultrasonic1(30,31);
+Ultrasonic ultrasonic2(32,33);
+
+bool ultrasonicWithinThreshold(Ultrasonic ultrasonic){
+  int read = ultrasonic.Ranging(CM);
+  if(read > ultrasonicLowThreshold && read < ultrasonicHighThreshold){
+    return true;
+  }
+  return false;
+}
+
+//bool ultrasonicFront(){
+//  return ultrasonicWithinThreshold(ultrasonic2) || ultrasonicWithinThreshold(ultrasonic3) || ultrasonicWithinThreshold(ultrasonic4);
+//}
+
+bool ultrasonicRight(){
+  return ultrasonicWithinThreshold(ultrasonic1);
+}
+
+bool ultrasonicLeft(){
+  return ultrasonicWithinThreshold(ultrasonic2);
+}
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(13, OUTPUT);
+  pinMode(12, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(10, OUTPUT);
+//  pinMode(9, OUTPUT);
+//  pinMode(8, OUTPUT);
+//  pinMode(7, OUTPUT);
+//  pinMode(6, OUTPUT);
+  pinMode(4, OUTPUT);
+  Serial.begin(9600);
+  Serial.println();
+  IR_FOUND = 0; 
+}
+
+void forward() {
+  digitalWrite(13, HIGH);
+  digitalWrite(12, LOW);
+  digitalWrite(11, HIGH);
+  digitalWrite(10, LOW);
+}
+
+void backwards() {
+  digitalWrite(13, LOW);
+  digitalWrite(12, HIGH);
+  digitalWrite(11, LOW);
+  digitalWrite(10, HIGH);
+}
+
+void FB_brake() {
+  digitalWrite(13, LOW);
+  digitalWrite(12, LOW);
+  digitalWrite(11, LOW);
+  digitalWrite(10, LOW);
+}
+
+void right() {
+  digitalWrite(13, HIGH);
+  digitalWrite(12, LOW);
+  digitalWrite(11, LOW);
+  digitalWrite(10, HIGH);
+}
+
+void left() {
+  digitalWrite(13, LOW);
+  digitalWrite(12, HIGH);
+  digitalWrite(11, HIGH);
+  digitalWrite(10, LOW);
+}
+
+//void LR_brake() {
+//  digitalWrite(9, LOW);
+//  digitalWrite(8, LOW);
+//  digitalWrite(7, LOW);
+//  digitalWrite(6, LOW);
+//}
+
+void loop() {
+
+//USE THIS FOR DISTANCE
+  int inLeft = ultrasonicLeft();
+  int inRight = ultrasonicRight();
+    
+  if(ultrasonicLeft()) {
+    backwards();
+    delay(1000);
+    right();
+    delay(500);}
+  else if(ultrasonicRight()) {
+    backwards();
+    delay(1000);
+    left();
+    delay(500);}
+  else {
+    forward();
+    delay(100);}
+  
+////USE THIS FOR IR  
+//  int pinRead0 = analogRead(inPin0);
+//  int pinRead1 = analogRead(inPin1);
+//  int pinRead2 = analogRead(inPin2);
+//  int pinRead3 = analogRead(inPin3);
+//
+//  if (pinRead0 > 50){
+//     right();
+//     delay(1000);
+//  }
+//  else if (pinRead1 > 50){
+//     forward();
+//     delay(500);
+//  }
+//  
+//  else if (pinRead3 > 50){
+//     left();
+//     delay(1000);
+//  }
+//  else {
+//     FB_brake(); 
+//     delay(500);
+//  }
+  
+  
+} 
+
+
